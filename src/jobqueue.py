@@ -3,6 +3,7 @@ import json
 import os
 import re
 import sqlite3
+import sys
 import uuid
 import urllib
 
@@ -513,9 +514,12 @@ class Application(object):
             for path in paths:
                 if os.path.isfile(path):
                     dbpath = path
-                    break 
+                    break
+            else:
+                print("No database found, run `make database`.", file=sys.stderr)
+                sys.exit(1)
 
-        self.job_queue = JobQueue(dbpath) 
+        self.job_queue = JobQueue(dbpath)
 
     def __call__(self, environ, start_response):
         method = environ.get('REQUEST_METHOD', 'GET')
